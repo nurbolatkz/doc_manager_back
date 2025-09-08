@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Вход</title>
+</head>
+<body>
+   {% csrf_token %}
+<div id="1c-html-content" style="display: none;">
+    {{ html_content|safe }}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the CSRF token from the Django-rendered hidden input
+        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+        // Get the HTML content from the hidden div and append it to the body
+        const container = document.createElement('div');
+        container.innerHTML = document.getElementById('1c-html-content').innerHTML;
+        document.body.appendChild(container);
+        
+        // Find the form within the 1C HTML and insert the CSRF token
+        const form = document.querySelector('form');
+        if (form) {
+            // Create a new hidden input for the CSRF token
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = csrfToken;
+            form.prepend(csrfInput);
+        }
+    });
+</script>
+</body>
+</html>
